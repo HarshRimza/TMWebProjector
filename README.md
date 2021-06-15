@@ -78,7 +78,7 @@ For Example :
 In the above code the '${username}' will be replaced by the actual value of 'username' in request scope.
 
 ## How to use template feature
-After creating the SCT file you need to run the templateCreator tool provided in the tool folder, it will create necessary file and the code inside your main CPP file will be the following
+After creating the SCT file you need to run the templateCreator tool provided in the tool folder, it will create necessary files and the code inside your main CPP file will be the following
 
 ```
 // eg1.cpp
