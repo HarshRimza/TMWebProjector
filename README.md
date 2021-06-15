@@ -1,6 +1,5 @@
 # TMWebProjector
-A C++ HTTP Server which can accepts HTTP requests from browser and returns responses like HTML page, image file, CSS file, JavaScript file etc. whatever the browser requests for.
-This server currently supports pages having MIME Type
+A C++ HTTP Server which can accepts HTTP requests from browser and returns responses like HTML page, image file, CSS file, JavaScript file etc. whatever the browser requests for. The server only works on windows platform and it currently supports pages having MIME Type.
 
 |Page|Type|
 |--------|------|
@@ -57,22 +56,60 @@ server.start();
 return 0;
 }
 ```
+for compiling it 
+```
+g++ -static main-file-name.cpp -o main-file-name.exe -I path-to-include-folder -L path-to-lib-folder -ltmwp -lws2_32
+```
 
 ### Server-side C Template
-This server also has a support for a template feature i.e. SCT(Server-side C Template) file. The code inside this should be written in html and wherever you wants the request object values its key name should be written within '${}'. A tool 
+This server also has a support for a template feature i.e. SCT(Server-side C Template) file. The code inside this should be written in html and wherever you wants the request object values its key name should be written within '${}'.
 
 For Example :
 ```
-// user.html
+// user.sct
 <!DOCTYPE html>
 <head> ... </head>
 <body>
 <h1>Welcome ${username}</h1>
 </body>
 </html>
-
-// 
 ```
 
 In the above code the '${username}' will be replaced by the actual value of 'username' in request scope.
 
+## How to use template feature
+After creating the SCT file you need to run the templateCreator tool provided in the tool folder, it will create necessary file and the code inside your main CPP file will be the following
+
+```
+// eg1.cpp
+#include"sct.h"
+#include<tmwp>
+using namespace std;
+void sam(Request &request,Response &response)
+{
+// another piece of code
+}
+
+void tom(Request &request,Response &response)
+{
+// there is no change in other codes
+
+// now you will be able to forward the request to the SCT File
+// request.forward("sam.sct");
+}
+
+int main()
+{
+TMWebProjector server(5000);
+server.onRequest("/callTom",tom);
+server.onRequest("/callSam",sam);
+registerSCTs(&server);
+server.start();
+return 0;
+}
+```
+
+for compiling it 
+```
+g++ -static *.cpp -o main-file-name.exe -I path-to-include-folder -L path-to-lib-folder -ltmwp -lws2_32
+```
