@@ -1,0 +1,141 @@
+// this file contains the getline and sendSCT function for .sct files
+// also sendFILE function to send file of TMWP.cpp
+
+int getline(char **line,FILE *file)
+{
+char character;
+char *g;
+int bufferSize,i;
+bufferSize=1024;
+if(*line) free(*line);
+*line=(char *)malloc(sizeof(char)*bufferSize);
+i=0;
+while(1)
+{
+character=fgetc(file);
+if(feof(file) || character=='\n' || character=='\0')break;
+if(i==bufferSize)
+{
+bufferSize+=1024;
+g=*line;
+*line=(char *)malloc(sizeof(char)*bufferSize);
+strcpy(*line,g);
+free(g);
+}
+(*line)[i]=character;
+i++;
+}
+(*line)[i]='\0';
+return i;
+}
+
+
+void sendSCT(Request *request,int clientSocketDescriptor)
+{
+FILE *file;
+char *line,*store,*toSend,*g,number[12];
+char header[51];
+int length,storeLength,value,i,j,e,f;
+int bufferSize;
+bufferSize=1024;
+line=NULL;
+file=fopen(request->resource,"r");
+strcpy(header,"HTTP/1.1 200 OK\nContent-Type: text/html\n\n");
+send(clientSocketDescriptor,header,strlen(header),0);
+while(1)
+{
+length=getline(&line,file);
+if(feof(file) && length==0) break;
+toSend=(char *)malloc(sizeof(char)*bufferSize);
+e=0;
+for(i=0;i<length;i++,e++)
+{
+if(i+1<length && line[i]=='$' && line[i+1]=='{')
+{
+for(j=i+2;j<length && line[j]!='}';j++);
+if(line[j]=='}')
+{
+storeLength=j-(i+2);
+store=(char *)malloc(sizeof(char)*(storeLength+1));
+strncpy(store,line+i+2,storeLength);
+value=request->getInt(store);
+sprintf(number,"%d",value);
+for(f=0;number[f]!='\0';f++,e++) 
+{
+if(e==bufferSize)
+{
+bufferSize+=1024;
+g=toSend;
+toSend=(char *)malloc(sizeof(char)*bufferSize);
+strcpy(toSend,g);
+free(g);
+}
+toSend[e]=number[f];
+}
+i=j;
+e--;
+}
+else
+{
+for(;i<length;i++,e++) 
+{
+if(e==bufferSize)
+{
+bufferSize+=1024;
+g=toSend;
+toSend=(char *)malloc(sizeof(char)*bufferSize);
+strcpy(toSend,g);
+free(g);
+}
+toSend[e]=line[i];
+}
+e--;
+}
+}
+else
+{
+if(e==bufferSize)
+{
+bufferSize+=1024;
+g=toSend;
+toSend=(char *)malloc(sizeof(char)*bufferSize);
+strcpy(toSend,g);
+free(g);
+}
+toSend[e]=line[i];
+}
+} // for loop ends
+toSend[e]='\0';
+send(clientSocketDescriptor,toSend,e,0);
+free(toSend);
+free(line);
+}
+free(line);
+fclose(file);
+}
+
+
+void sendFILE(int socketDescriptor,const char *fileName,const char *mimeType)
+{
+char header[1024];
+char responseBuffer[1025];
+long fileSize;
+int bufferSize;
+long dataSent;
+FILE *file;
+file=fopen(fileName,"rb");
+fseek(file,0,2);
+fileSize=ftell(file);
+sprintf(header,"HTTP/1.1 200 OK\nContent-Type: %s\nContent-Length: %d\nConnection: close\n\n",mimeType,fileSize);
+send(socketDescriptor,header,strlen(header),0);
+fseek(file,0,0);
+bufferSize=1024;
+dataSent=0;
+while(dataSent<fileSize)
+{
+if((fileSize-dataSent)<bufferSize) bufferSize=fileSize-dataSent;
+fread(responseBuffer,bufferSize,1,file);
+dataSent+=send(socketDescriptor,responseBuffer,bufferSize,0);
+}
+fclose(file);
+}
