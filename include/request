@@ -1,0 +1,37 @@
+#ifndef REQ
+#define REQ
+#include<map>
+#include<utility>
+#include<iostream>
+using namespace std;
+
+namespace tmwp
+{
+class Request
+{
+private: 
+map<string,string> data;
+map<string,int> numbers;
+char *to_forward,*to_forward_type;
+bool is_forwarding;
+public: 
+char *method;
+char *resource;
+char isClientSideTechnologyResource;
+char *mimeType;
+void prepare_map(int data_count,char **data);
+//int dataCount;
+//char ** data;
+Request();
+~Request();
+char * get(const char *to_get);
+void setInt(const char *attribute,int value);
+int getInt(const char *to_get);
+void forward(const char *to_forward_request);
+void setIsForwarding(bool );
+bool isForwarding();
+void toForward(char **ptop);
+void toForwardType(char **ptop);
+};
+}
+#endif

@@ -1,0 +1,17 @@
+#ifndef URLENCODER
+#define URLENCODER 13
+#include<iostream>
+using namespace std;
+
+namespace tmwp
+{
+class URLEncoder
+{
+private:
+URLEncoder();
+public:
+static string encode(char *toEncode);
+static string decode(char *toDecode);
+};
+}
+#endif

@@ -1,0 +1,62 @@
+#ifndef ___TMWP
+#define ___TMWP 13
+#include<map>
+#include<utility>
+#include<iostream>
+using namespace std;
+
+namespace tmwp
+{
+class Request
+{
+private: 
+map<string,string> keyValues;
+map<string,int> numbers;
+public: 
+char *method;
+char *resource;
+char isClientSideTechnologyResource;
+char *mimeType;
+int dataCount;
+char **data;
+string forwardTo;
+Request();
+~Request();
+void setKeyValue(string k,string v);
+string getValue(string k);
+string get(string name);
+void forward(string forwardTo);
+void setInt(const char *attribute,int value);
+int getInt(const char *to_get);
+};
+
+class Response
+{
+private:
+int clientSocketDescriptor;
+bool isClosed;
+bool headerCreated;
+void createHeader();
+public:
+Response(int clientSocketDescriptor);
+~Response();
+void write(const char *to_write);
+void write(char to_write);
+void write(int to_write);
+void write(string to_write);
+void close();
+};
+
+class TMWebProjector
+{
+private:
+int portNumber;
+map<string,void (*)(Request &,Response &)> services;
+public:
+TMWebProjector(int portNumber);
+~TMWebProjector();
+void start();
+void onRequest(string url,void (*ptrOnRequest)(Request &,Response &));
+};
+}
+#endif
