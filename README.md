@@ -13,3 +13,17 @@ This server currently supports pages having MIME Type
 |BMP File|image/bmp|
 |ICO File|image/x-icon|
 
+### Server-side C Template
+This server also has a support for a template feature i.e. SCT(Server-side C Template) file. The code inside this should be written in html and wherever you wants the request object values its key name should be written within '${}'.
+
+For Example :
+```
+<!DOCTYPE html>
+<head> ... </head>
+<body>
+<h1>Welcome ${username}</h1>
+</body>
+</html>
+```
+
+In the above code the '${username}' will be replaced by the actual value of 'username' in request scope.
