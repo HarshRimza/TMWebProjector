@@ -85,10 +85,6 @@ After creating the SCT file you need to run the templateCreator tool provided in
 #include"sct.h"
 #include<tmwp>
 using namespace std;
-void sam(Request &request,Response &response)
-{
-// another piece of code
-}
 
 void tom(Request &request,Response &response)
 {
@@ -102,7 +98,6 @@ int main()
 {
 TMWebProjector server(5000);
 server.onRequest("/callTom",tom);
-server.onRequest("/callSam",sam);
 registerSCTs(&server);
 server.start();
 return 0;
