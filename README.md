@@ -1,4 +1,4 @@
-# TMWebProjector
+# <div align='center'> TMWebProjector </div>
 A C/C++ HTTP Server which can accepts HTTP requests from browser and returns responses like HTML page, image file, CSS file, JavaScript file etc. whatever the browser requests for. The server only works on windows platform and it currently supports pages having MIME Type.
 
 |Page|Type|
