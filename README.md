@@ -1,6 +1,7 @@
 # <div align='center'> TMWebProjector </div>
 A C/C++ HTTP Server which can accepts HTTP requests from browser and returns responses like HTML page, image file, CSS file, JavaScript file etc. whatever the browser requests for. The server only works on windows platform and it currently supports pages having MIME Type.
 
+<div align='center'>
 |Page|Type|
 |--------|------|
 |HTML File|text/html|
@@ -11,7 +12,8 @@ A C/C++ HTTP Server which can accepts HTTP requests from browser and returns res
 |JPEG File|image/jpeg|
 |BMP File|image/bmp|
 |ICO File|image/x-icon|
-
+</div>
+  
 ### How to use the library
 ```
 // eg1.cpp
