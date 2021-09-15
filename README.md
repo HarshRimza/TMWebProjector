@@ -17,7 +17,7 @@ A C/C++ HTTP Server which can accepts HTTP requests from browser and returns res
 </div>
   
 ### How to use the library
-```
+```c++
 // eg1.cpp
 #include<tmwp>
 using namespace std;
@@ -69,7 +69,7 @@ g++ -static main-file-name.cpp -o main-file-name.exe -I path-to-include-folder -
 This server also has a support for a template feature i.e. SCT(Server-side C Template) file. The code inside this should be written in html and wherever you wants the request object values its key name should be written within '${}'.
 
 For Example :
-```
+```html
 // user.sct
 <!DOCTYPE html>
 <head> ... </head>
@@ -84,7 +84,7 @@ In the above code the '${username}' will be replaced by the actual value of 'use
 ### How to use template feature
 After creating the SCT file you need to run the templateCreator tool provided in the tool folder, it will create necessary files and the code inside your main CPP file will be the following
 
-```
+```c++
 // eg1.cpp
 #include"sct.h"
 #include<tmwp>
